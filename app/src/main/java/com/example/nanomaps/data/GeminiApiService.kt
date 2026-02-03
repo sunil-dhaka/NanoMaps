@@ -48,6 +48,257 @@ class GeminiApiService {
         }
     }
 
+    suspend fun generateFantasyView(
+        apiKey: String,
+        fantasyMap: FantasyMap,
+        location: FantasyLocation,
+        direction: Int,
+        mapBitmap: Bitmap,
+        customPrompt: String?,
+        style: GenerationStyle,
+        customStylePrompt: String?,
+        aspectRatio: AspectRatio,
+        imageSize: ImageSize
+    ): Result<Bitmap> = withContext(Dispatchers.IO) {
+        try {
+            val result = generateFantasyWithModel(
+                apiKey, fantasyMap, location, direction,
+                mapBitmap, customPrompt, style, customStylePrompt, aspectRatio, imageSize
+            )
+            Result.success(result)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    private fun generateFantasyWithModel(
+        apiKey: String,
+        fantasyMap: FantasyMap,
+        location: FantasyLocation,
+        direction: Int,
+        mapBitmap: Bitmap,
+        customPrompt: String?,
+        style: GenerationStyle,
+        customStylePrompt: String?,
+        aspectRatio: AspectRatio,
+        imageSize: ImageSize
+    ): Bitmap {
+        val prompt = buildFantasyPrompt(fantasyMap, location, direction, customPrompt, style, customStylePrompt)
+        val mapBase64 = bitmapToBase64(mapBitmap)
+
+        val requestBody = JSONObject().apply {
+            put("contents", JSONArray().apply {
+                put(JSONObject().apply {
+                    put("parts", JSONArray().apply {
+                        put(JSONObject().apply {
+                            put("text", prompt)
+                        })
+                        put(JSONObject().apply {
+                            put("inline_data", JSONObject().apply {
+                                put("mime_type", "image/png")
+                                put("data", mapBase64)
+                            })
+                        })
+                    })
+                })
+            })
+            put("generation_config", JSONObject().apply {
+                put("response_modalities", JSONArray().apply {
+                    put("TEXT")
+                    put("IMAGE")
+                })
+                put("image_config", JSONObject().apply {
+                    put("aspect_ratio", aspectRatio.value)
+                    put("image_size", imageSize.value)
+                })
+            })
+        }
+
+        val url = "https://generativelanguage.googleapis.com/v1beta/models/$model:generateContent"
+
+        val request = Request.Builder()
+            .url(url)
+            .addHeader("Content-Type", "application/json")
+            .addHeader("x-goog-api-key", apiKey)
+            .post(requestBody.toString().toRequestBody("application/json".toMediaType()))
+            .build()
+
+        val response = client.newCall(request).execute()
+
+        if (!response.isSuccessful) {
+            val errorBody = response.body?.string() ?: "Unknown error"
+            val errorJson = try {
+                JSONObject(errorBody)
+            } catch (e: Exception) {
+                null
+            }
+            val errorMessage = errorJson?.optJSONObject("error")?.optString("message") ?: errorBody
+
+            when {
+                response.code == 429 || errorMessage.contains("quota") ->
+                    throw Exception("Quota exceeded. Get a key from aistudio.google.com")
+                response.code == 400 && errorMessage.contains("API key") ->
+                    throw Exception("Invalid API key")
+                else -> throw Exception(errorMessage)
+            }
+        }
+
+        val responseBody = response.body?.string() ?: throw Exception("Empty response")
+        val responseJson = JSONObject(responseBody)
+
+        val candidates = responseJson.optJSONArray("candidates")
+            ?: throw Exception("No candidates in response")
+
+        if (candidates.length() == 0) {
+            throw Exception("Empty candidates array")
+        }
+
+        val content = candidates.getJSONObject(0).optJSONObject("content")
+            ?: throw Exception("No content in candidate")
+
+        val parts = content.optJSONArray("parts")
+            ?: throw Exception("No parts in content")
+
+        for (i in 0 until parts.length()) {
+            val part = parts.getJSONObject(i)
+            val inlineData = part.optJSONObject("inlineData")
+            if (inlineData != null) {
+                val imageData = inlineData.optString("data")
+                if (imageData.isNotEmpty()) {
+                    return base64ToBitmap(imageData)
+                }
+            }
+        }
+
+        throw Exception("No image was generated")
+    }
+
+    private fun buildFantasyPrompt(
+        fantasyMap: FantasyMap,
+        location: FantasyLocation,
+        direction: Int,
+        customPrompt: String?,
+        style: GenerationStyle,
+        customStylePrompt: String?
+    ): String {
+        val directionName = getDirectionName(direction)
+        val xPercent = String.format("%.1f", location.xPercent * 100)
+        val yPercent = String.format("%.1f", location.yPercent * 100)
+
+        val worldContext = if (fantasyMap.worldContext.isNotBlank()) {
+            """
+FANTASY WORLD CONTEXT:
+${fantasyMap.worldContext}
+            """.trimIndent()
+        } else {
+            ""
+        }
+
+        val stylePrompt = if (style == GenerationStyle.CUSTOM && !customStylePrompt.isNullOrBlank()) {
+            """
+STYLE: Custom User Style
+$customStylePrompt
+            """.trimIndent()
+        } else when (style) {
+            GenerationStyle.REALISTIC -> """
+STYLE: Photorealistic Fantasy
+Create a crystal-clear, ultra-realistic photograph as if you were actually standing in this fantasy world.
+- Perfect exposure and white balance
+- Sharp details on architecture, textures, and natural elements
+- Natural lighting conditions appropriate to the fantasy setting
+- Accurate materials and surfaces (stone, wood, metal, fabric)
+- Realistic depth of field
+The image should feel like a photograph taken in a real fantasy world.
+            """.trimIndent()
+
+            GenerationStyle.CINEMATIC -> """
+STYLE: Epic Fantasy Cinematic
+Create a breathtaking cinematic shot worthy of a fantasy film.
+- Dramatic golden hour or magical lighting
+- Long, atmospheric shadows
+- Rich, saturated colors with fantasy color grading
+- Atmospheric haze, mist, or magical particles
+- Epic sense of scale and grandeur
+Make it look like a scene from Lord of the Rings, Game of Thrones, or a high-budget fantasy production.
+            """.trimIndent()
+
+            GenerationStyle.RAINY -> """
+STYLE: Moody Fantasy Rain
+Create an atmospheric rainy scene in this fantasy world.
+- Wet, glistening cobblestones and surfaces reflecting torchlight
+- Puddles creating mirror-like reflections
+- Soft, diffused lighting from overcast skies
+- Light rain or mist visible in the air
+- Warm light from tavern windows and lanterns bleeding into the wet surfaces
+- That cozy medieval fantasy atmosphere of shelter from a storm
+            """.trimIndent()
+
+            GenerationStyle.VINTAGE -> """
+STYLE: Ancient Chronicle
+Transform this into an aged illustration from an ancient tome or chronicle.
+- Faded, parchment-like color palette with warm sepia tones
+- Hand-drawn quality with visible brushwork
+- Slight texture as if on old paper or canvas
+- The aesthetic of a discovered artifact or historical record
+- Medieval illuminated manuscript inspiration
+            """.trimIndent()
+
+            GenerationStyle.ANIME -> """
+STYLE: Fantasy Anime World
+Reimagine this location in beautiful Japanese anime style.
+- Vibrant, saturated colors that pop with life
+- Dreamy skies with dramatic clouds
+- Clean linework with soft cel-shading
+- Magical, whimsical atmosphere
+- Lush vegetation and architectural details in anime style
+- Small magical details (floating particles, magical lights, ethereal glow)
+Channel the spirit of Studio Ghibli fantasy films.
+            """.trimIndent()
+
+            GenerationStyle.CUSTOM -> """
+STYLE: Photorealistic Fantasy
+Create a crystal-clear, ultra-realistic photograph in this fantasy setting.
+            """.trimIndent()
+        }
+
+        val basePrompt = """
+FANTASY MAP GENERATION
+
+MAP NAME: ${fantasyMap.name}
+Position: ${xPercent}% from left, ${yPercent}% from top
+VIEWING DIRECTION: Looking $directionName ($direction degrees from North)
+
+$worldContext
+
+Using the fantasy map provided, analyze:
+- Terrain features at the marked position
+- Settlements, structures, landmarks nearby
+- Geographic features (mountains, forests, rivers, coastlines)
+- Overall aesthetic and era of the map
+- The type of fantasy world depicted (medieval, high fantasy, dark fantasy, etc.)
+
+$stylePrompt
+
+CAMERA PERSPECTIVE:
+- First-person ground-level view at eye height (1.7 meters)
+- Natural field of view as seen by human eyes
+- Ground-level perspective showing the landscape/street ahead
+        """.trimIndent()
+
+        return if (!customPrompt.isNullOrBlank()) {
+            """
+$basePrompt
+
+IMPORTANT - USER'S SPECIFIC REQUEST (prioritize this):
+$customPrompt
+
+Generate the image following the user's specific instructions above while maintaining the chosen style.
+            """.trimIndent()
+        } else {
+            "$basePrompt\n\nGenerate the image now."
+        }
+    }
+
     private fun generateWithModel(
         apiKey: String,
         latitude: Double,

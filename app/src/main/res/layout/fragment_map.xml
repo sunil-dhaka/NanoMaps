@@ -38,6 +38,35 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- Mode Toggle Chips -->
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/mode_chip_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_sm"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/search_layout"
+            app:selectionRequired="true"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_real_world"
+                style="@style/Widget.NanoMaps.Chip.MapLayer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/mode_real_world" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_fantasy"
+                style="@style/Widget.NanoMaps.Chip.MapLayer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mode_fantasy" />
+
+        </com.google.android.material.chip.ChipGroup>
+
         <!-- Map Card -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/map_card"
@@ -48,7 +77,7 @@
             app:cardElevation="@dimen/elevation_medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/search_layout"
+            app:layout_constraintTop_toBottomOf="@id/mode_chip_group"
             app:strokeWidth="0dp">
 
             <FrameLayout
@@ -60,7 +89,52 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
-                <!-- Layer Toggle Chips -->
+                <!-- Fantasy Map View (PhotoView) -->
+                <com.github.chrisbanes.photoview.PhotoView
+                    android:id="@+id/fantasy_map_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitCenter"
+                    android:visibility="gone" />
+
+                <!-- Fantasy Map Overlay for marker/direction drawing -->
+                <com.example.nanomaps.ui.map.FantasyOverlayView
+                    android:id="@+id/fantasy_overlay"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone" />
+
+                <!-- No Fantasy Map Selected Placeholder -->
+                <LinearLayout
+                    android:id="@+id/fantasy_placeholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_placeholder"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_lg"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_size_placeholder"
+                        android:layout_height="@dimen/icon_size_placeholder"
+                        android:alpha="0.4"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_fantasy_map"
+                        app:tint="?attr/colorOnSurfaceVariant" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_sm"
+                        android:gravity="center"
+                        android:text="@string/no_fantasy_maps"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:textColor="?attr/colorOnSurfaceVariant" />
+
+                </LinearLayout>
+
+                <!-- Layer Toggle Chips (for real world mode) -->
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/layer_chip_group"
                     android:layout_width="wrap_content"
@@ -86,6 +160,18 @@
                         android:text="@string/layer_satellite" />
 
                 </com.google.android.material.chip.ChipGroup>
+
+                <!-- FAB to select/change fantasy map -->
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_select_fantasy_map"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|end"
+                    android:layout_margin="@dimen/spacing_sm"
+                    android:contentDescription="@string/select_fantasy_map"
+                    android:src="@drawable/ic_fantasy_map"
+                    android:visibility="gone"
+                    app:fabSize="mini" />
 
                 <!-- Direction Indicator -->
                 <include

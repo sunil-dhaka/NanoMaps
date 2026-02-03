@@ -10,7 +10,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.nanomaps.data.FantasyLocation
+import com.example.nanomaps.data.FantasyMap
+import com.example.nanomaps.data.FantasyMapStorage
 import com.example.nanomaps.data.GeminiApiService
+import com.example.nanomaps.data.MapMode
 import com.example.nanomaps.data.PreferencesRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -24,12 +28,28 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
 
     private val preferencesRepository = PreferencesRepository.getInstance(application)
     private val geminiService = GeminiApiService.getInstance()
+    private val fantasyMapStorage = FantasyMapStorage.getInstance(application)
 
     private val _location = MutableLiveData<GeoPoint?>()
     val location: LiveData<GeoPoint?> = _location
 
     private val _direction = MutableLiveData<Int?>()
     val direction: LiveData<Int?> = _direction
+
+    private val _fantasyLocation = MutableLiveData<FantasyLocation?>()
+    val fantasyLocation: LiveData<FantasyLocation?> = _fantasyLocation
+
+    private val _fantasyDirection = MutableLiveData<Int?>()
+    val fantasyDirection: LiveData<Int?> = _fantasyDirection
+
+    private val _activeFantasyMap = MutableLiveData<FantasyMap?>()
+    val activeFantasyMap: LiveData<FantasyMap?> = _activeFantasyMap
+
+    private val _mapMode = MutableLiveData(MapMode.REAL_WORLD)
+    val mapMode: LiveData<MapMode> = _mapMode
+
+    private val _fantasyMapBitmap = MutableLiveData<Bitmap?>()
+    val fantasyMapBitmap: LiveData<Bitmap?> = _fantasyMapBitmap
 
     private val _generationState = MutableLiveData<GenerationState>(GenerationState.Idle)
     val generationState: LiveData<GenerationState> = _generationState
@@ -51,6 +71,67 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
     var mapZoom: Double = 15.0
         private set
     var isSatelliteLayer: Boolean = false
+
+    init {
+        loadActiveFantasyMap()
+    }
+
+    private fun loadActiveFantasyMap() {
+        val map = preferencesRepository.getActiveFantasyMap()
+        _activeFantasyMap.value = map
+        if (map != null) {
+            viewModelScope.launch(Dispatchers.IO) {
+                val bitmap = fantasyMapStorage.loadMapBitmap(map.imagePath)
+                withContext(Dispatchers.Main) {
+                    _fantasyMapBitmap.value = bitmap
+                }
+            }
+        }
+    }
+
+    fun setMapMode(mode: MapMode) {
+        _mapMode.value = mode
+        preferencesRepository.saveMapMode(mode)
+        updateCanGenerate()
+    }
+
+    fun setActiveFantasyMap(map: FantasyMap?) {
+        _activeFantasyMap.value = map
+        preferencesRepository.saveActiveFantasyMapId(map?.id)
+        if (map != null) {
+            viewModelScope.launch(Dispatchers.IO) {
+                val bitmap = fantasyMapStorage.loadMapBitmap(map.imagePath)
+                withContext(Dispatchers.Main) {
+                    _fantasyMapBitmap.value = bitmap
+                    clearFantasySelection()
+                    updateCanGenerate()
+                }
+            }
+        } else {
+            _fantasyMapBitmap.value = null
+            updateCanGenerate()
+        }
+    }
+
+    fun refreshFantasyMaps() {
+        loadActiveFantasyMap()
+    }
+
+    fun setFantasyLocation(location: FantasyLocation) {
+        _fantasyLocation.value = location
+        updateCanGenerate()
+    }
+
+    fun setFantasyDirection(degrees: Int) {
+        _fantasyDirection.value = degrees
+        updateCanGenerate()
+    }
+
+    fun clearFantasySelection() {
+        _fantasyLocation.value = null
+        _fantasyDirection.value = null
+        updateCanGenerate()
+    }
 
     fun setMapState(center: GeoPoint, zoom: Double) {
         mapCenter = center
@@ -76,17 +157,35 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun updateCanGenerate() {
-        val hasLocation = _location.value != null
-        val hasDirection = _direction.value != null
         val hasApiKey = preferencesRepository.hasApiKey()
+        val mode = _mapMode.value ?: MapMode.REAL_WORLD
 
-        _canGenerate.value = hasLocation && hasDirection && hasApiKey
+        if (mode == MapMode.FANTASY) {
+            val hasFantasyMap = _activeFantasyMap.value != null
+            val hasFantasyLocation = _fantasyLocation.value != null
+            val hasFantasyDirection = _fantasyDirection.value != null
 
-        _requirementHint.value = when {
-            !hasLocation -> RequirementHint.LOCATION
-            !hasDirection -> RequirementHint.DIRECTION
-            !hasApiKey -> RequirementHint.API_KEY
-            else -> RequirementHint.READY
+            _canGenerate.value = hasFantasyMap && hasFantasyLocation && hasFantasyDirection && hasApiKey
+
+            _requirementHint.value = when {
+                !hasFantasyMap -> RequirementHint.SELECT_FANTASY_MAP
+                !hasFantasyLocation -> RequirementHint.FANTASY_LOCATION
+                !hasFantasyDirection -> RequirementHint.FANTASY_DIRECTION
+                !hasApiKey -> RequirementHint.API_KEY
+                else -> RequirementHint.READY
+            }
+        } else {
+            val hasLocation = _location.value != null
+            val hasDirection = _direction.value != null
+
+            _canGenerate.value = hasLocation && hasDirection && hasApiKey
+
+            _requirementHint.value = when {
+                !hasLocation -> RequirementHint.LOCATION
+                !hasDirection -> RequirementHint.DIRECTION
+                !hasApiKey -> RequirementHint.API_KEY
+                else -> RequirementHint.READY
+            }
         }
     }
 
@@ -120,6 +219,56 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
                 mapBitmap = mapBitmap,
                 customPrompt = customPrompt,
                 isSatelliteView = isSatellite,
+                style = style,
+                customStylePrompt = customStylePrompt,
+                aspectRatio = aspectRatio,
+                imageSize = imageSize
+            )
+
+            result.fold(
+                onSuccess = { bitmap ->
+                    currentBitmap = bitmap
+                    _generationState.value = GenerationState.Success(bitmap)
+                },
+                onFailure = { error ->
+                    _generationState.value = GenerationState.Error(
+                        error.message ?: "Generation failed"
+                    )
+                }
+            )
+        }
+    }
+
+    fun generateFantasy(fantasyMapBitmap: Bitmap, customPrompt: String?) {
+        val fantasyMap = _activeFantasyMap.value ?: return
+        val loc = _fantasyLocation.value ?: return
+        val dir = _fantasyDirection.value ?: return
+        val apiKey = preferencesRepository.getApiKey()
+
+        if (apiKey.isNullOrBlank()) {
+            _generationState.value = GenerationState.Error("Please set your API key in Settings")
+            return
+        }
+
+        val style = preferencesRepository.getStyle()
+        val aspectRatio = preferencesRepository.getAspectRatio()
+        val imageSize = preferencesRepository.getImageSize()
+
+        val customStylePrompt = if (style == com.example.nanomaps.data.GenerationStyle.CUSTOM) {
+            val customStyleId = preferencesRepository.getSelectedCustomStyleId()
+            customStyleId?.let { preferencesRepository.getCustomStyleById(it)?.prompt }
+        } else null
+
+        _generationState.value = GenerationState.Loading
+
+        generationJob = viewModelScope.launch {
+            val result = geminiService.generateFantasyView(
+                apiKey = apiKey,
+                fantasyMap = fantasyMap,
+                location = loc,
+                direction = dir,
+                mapBitmap = fantasyMapBitmap,
+                customPrompt = customPrompt,
                 style = style,
                 customStylePrompt = customStylePrompt,
                 aspectRatio = aspectRatio,
@@ -234,6 +383,13 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
         LOCATION,
         DIRECTION,
         API_KEY,
-        READY
+        READY,
+        SELECT_FANTASY_MAP,
+        FANTASY_LOCATION,
+        FANTASY_DIRECTION
+    }
+
+    fun getFantasyMaps(): List<FantasyMap> {
+        return preferencesRepository.getFantasyMaps()
     }
 }

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/spacing_lg">
+
+    <!-- Image Preview Card -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/image_preview_card"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        app:cardCornerRadius="@dimen/corner_medium"
+        app:cardElevation="0dp"
+        app:strokeColor="?attr/colorOutlineVariant"
+        app:strokeWidth="1dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- Placeholder when no image selected -->
+            <LinearLayout
+                android:id="@+id/image_placeholder"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_placeholder"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:alpha="0.4"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_fantasy_map"
+                    app:tint="?attr/colorOnSurfaceVariant" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:text="@string/select_image"
+                    android:textAppearance="?attr/textAppearanceBodySmall"
+                    android:textColor="?attr/colorOnSurfaceVariant" />
+
+            </LinearLayout>
+
+            <!-- Image Preview -->
+            <ImageView
+                android:id="@+id/image_preview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+        </FrameLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Select/Change Image Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/select_image_button"
+        style="@style/Widget.Material3.Button.TonalButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_sm"
+        android:text="@string/select_image"
+        app:icon="@drawable/ic_add" />
+
+    <!-- Map Name Input -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/map_name_layout"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_md"
+        android:hint="@string/fantasy_map_name_hint">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/map_name_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:maxLines="1" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- World Context Input -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/world_context_layout"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_md"
+        android:hint="@string/fantasy_world_context_hint">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/world_context_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:maxLines="6"
+            android:minLines="3" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>

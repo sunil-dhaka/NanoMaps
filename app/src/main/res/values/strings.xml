@@ -94,4 +94,30 @@
     <string name="custom_style_name_required">Please enter a style name</string>
     <string name="custom_style_prompt_required">Please enter a style prompt</string>
     <string name="no_custom_styles">No custom styles yet. Tap + to create one.</string>
+
+    <!-- Fantasy Maps -->
+    <string name="mode_real_world">Real World</string>
+    <string name="mode_fantasy">Fantasy</string>
+    <string name="fantasy_maps_title">Fantasy Maps</string>
+    <string name="fantasy_maps_description">Upload custom maps to generate fantasy street views.</string>
+    <string name="add_fantasy_map">Add Fantasy Map</string>
+    <string name="edit_fantasy_map">Edit Fantasy Map</string>
+    <string name="fantasy_map_name_hint">Map name (e.g., Middle-earth)</string>
+    <string name="fantasy_world_context_hint">Describe the world (optional): elves, dragons, medieval setting...</string>
+    <string name="select_fantasy_map">Select a fantasy map</string>
+    <string name="no_fantasy_maps">No fantasy maps yet. Add one in Settings.</string>
+    <string name="requirement_select_fantasy_map">Select a fantasy map first</string>
+    <string name="requirement_fantasy_location">Tap on map to select position</string>
+    <string name="requirement_fantasy_direction">Drag from marker to set direction</string>
+    <string name="fantasy_map_saved">Fantasy map saved</string>
+    <string name="fantasy_map_deleted">Fantasy map deleted</string>
+    <string name="fantasy_map_name_required">Please enter a map name</string>
+    <string name="no_fantasy_maps_settings">No fantasy maps yet. Tap + to add one.</string>
+    <string name="delete_fantasy_map">Delete</string>
+    <string name="fantasy_position_label">Position</string>
+    <string name="fantasy_position_format">%1$.1f%%, %2$.1f%%</string>
+    <string name="select_image">Select Image</string>
+    <string name="change_image">Change Image</string>
+    <string name="image_required">Please select an image</string>
+    <string name="tap_drag_fantasy_instruction">Tap to place marker, drag to set direction</string>
 </resources>

@@ -15,6 +15,11 @@ enum class GenerationStyle {
     CUSTOM
 }
 
+enum class MapMode {
+    REAL_WORLD,
+    FANTASY
+}
+
 data class CustomStyle(
     val id: String,
     val name: String,
@@ -163,6 +168,71 @@ class PreferencesRepository(context: Context) {
         }
     }
 
+    fun saveMapMode(mode: MapMode) {
+        sharedPreferences.edit().putString(KEY_MAP_MODE, mode.name).apply()
+    }
+
+    fun getMapMode(): MapMode {
+        val modeName = sharedPreferences.getString(KEY_MAP_MODE, MapMode.REAL_WORLD.name)
+        return try {
+            MapMode.valueOf(modeName ?: MapMode.REAL_WORLD.name)
+        } catch (e: Exception) {
+            MapMode.REAL_WORLD
+        }
+    }
+
+    fun saveFantasyMap(map: FantasyMap) {
+        val maps = getFantasyMaps().toMutableList()
+        val existingIndex = maps.indexOfFirst { it.id == map.id }
+        if (existingIndex >= 0) {
+            maps[existingIndex] = map
+        } else {
+            maps.add(map)
+        }
+        saveFantasyMaps(maps)
+    }
+
+    fun deleteFantasyMap(mapId: String) {
+        val maps = getFantasyMaps().filter { it.id != mapId }
+        saveFantasyMaps(maps)
+        if (getActiveFantasyMapId() == mapId) {
+            saveActiveFantasyMapId(null)
+        }
+    }
+
+    fun getFantasyMaps(): List<FantasyMap> {
+        val json = sharedPreferences.getString(KEY_FANTASY_MAPS, null) ?: return emptyList()
+        return try {
+            val jsonArray = JSONArray(json)
+            (0 until jsonArray.length()).map { FantasyMap.fromJson(jsonArray.getJSONObject(it)) }
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    fun getFantasyMapById(id: String): FantasyMap? {
+        return getFantasyMaps().find { it.id == id }
+    }
+
+    private fun saveFantasyMaps(maps: List<FantasyMap>) {
+        val jsonArray = JSONArray()
+        maps.forEach { jsonArray.put(it.toJson()) }
+        sharedPreferences.edit().putString(KEY_FANTASY_MAPS, jsonArray.toString()).apply()
+    }
+
+    fun saveActiveFantasyMapId(mapId: String?) {
+        sharedPreferences.edit().putString(KEY_ACTIVE_FANTASY_MAP_ID, mapId).apply()
+    }
+
+    fun getActiveFantasyMapId(): String? {
+        return sharedPreferences.getString(KEY_ACTIVE_FANTASY_MAP_ID, null)
+    }
+
+    fun getActiveFantasyMap(): FantasyMap? {
+        val mapId = getActiveFantasyMapId() ?: return null
+        return getFantasyMapById(mapId)
+    }
+
     companion object {
         private const val KEY_API_KEY = "gemini_api_key"
         private const val KEY_STYLE = "generation_style"
@@ -170,6 +240,9 @@ class PreferencesRepository(context: Context) {
         private const val KEY_IMAGE_SIZE = "image_size"
         private const val KEY_CUSTOM_STYLES = "custom_styles"
         private const val KEY_SELECTED_CUSTOM_STYLE_ID = "selected_custom_style_id"
+        private const val KEY_MAP_MODE = "map_mode"
+        private const val KEY_FANTASY_MAPS = "fantasy_maps"
+        private const val KEY_ACTIVE_FANTASY_MAP_ID = "active_fantasy_map_id"
 
         @Volatile
         private var instance: PreferencesRepository? = null

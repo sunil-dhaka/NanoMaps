@@ -17,6 +17,7 @@ okhttp = "4.12.0"
 coil = "2.6.0"
 securityCrypto = "1.1.0-alpha06"
 coroutines = "1.8.0"
+photoview = "2.3.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -35,6 +36,7 @@ okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhtt
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "securityCrypto" }
 coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+photoview = { module = "com.github.chrisbanes:PhotoView", version.ref = "photoview" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

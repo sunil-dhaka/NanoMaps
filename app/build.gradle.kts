@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.security.crypto)
     implementation(libs.coroutines.android)
+    implementation(libs.photoview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

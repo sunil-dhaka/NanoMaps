@@ -1,28 +1,37 @@
 package com.example.nanomaps.ui.settings
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.nanomaps.R
 import com.example.nanomaps.data.AspectRatio
 import com.example.nanomaps.data.CustomStyle
+import com.example.nanomaps.data.FantasyMap
 import com.example.nanomaps.data.GenerationStyle
 import com.example.nanomaps.data.ImageSize
+import com.example.nanomaps.databinding.DialogAddFantasyMapBinding
 import com.example.nanomaps.databinding.DialogCustomStyleBinding
 import com.example.nanomaps.databinding.FragmentSettingsBinding
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.radiobutton.MaterialRadioButton
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SettingsFragment : Fragment() {
 
@@ -31,6 +40,23 @@ class SettingsFragment : Fragment() {
 
     private lateinit var viewModel: SettingsViewModel
     private var selectedCustomStyleId: String? = null
+
+    private var pendingFantasyMapDialogBinding: DialogAddFantasyMapBinding? = null
+    private var selectedFantasyMapImageUri: Uri? = null
+
+    private val imagePickerLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let { selectedUri ->
+            selectedFantasyMapImageUri = selectedUri
+            pendingFantasyMapDialogBinding?.let { dialogBinding ->
+                dialogBinding.imagePreview.setImageURI(selectedUri)
+                dialogBinding.imagePreview.visibility = View.VISIBLE
+                dialogBinding.imagePlaceholder.visibility = View.GONE
+                dialogBinding.selectImageButton.text = getString(R.string.change_image)
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -127,6 +153,10 @@ class SettingsFragment : Fragment() {
             showCustomStyleDialog(null)
         }
 
+        binding.addFantasyMapButton.setOnClickListener {
+            showFantasyMapDialog(null)
+        }
+
         binding.saveButton.setOnClickListener {
             saveSettings()
         }
@@ -190,6 +220,10 @@ class SettingsFragment : Fragment() {
 
         viewModel.customStyles.observe(viewLifecycleOwner) { styles ->
             updateCustomStylesUI(styles)
+        }
+
+        viewModel.fantasyMaps.observe(viewLifecycleOwner) { maps ->
+            updateFantasyMapsUI(maps)
         }
     }
 
@@ -296,6 +330,137 @@ class SettingsFragment : Fragment() {
             .show()
     }
 
+    private fun updateFantasyMapsUI(maps: List<FantasyMap> = viewModel.fantasyMaps.value ?: emptyList()) {
+        binding.fantasyMapsContainer.removeAllViews()
+
+        if (maps.isEmpty()) {
+            binding.noFantasyMapsText.visibility = View.VISIBLE
+        } else {
+            binding.noFantasyMapsText.visibility = View.GONE
+
+            maps.forEach { map ->
+                val itemView = layoutInflater.inflate(R.layout.item_fantasy_map, binding.fantasyMapsContainer, false)
+
+                val nameText = itemView.findViewById<TextView>(R.id.map_name)
+                val contextPreview = itemView.findViewById<TextView>(R.id.map_context_preview)
+                val thumbnail = itemView.findViewById<ImageView>(R.id.map_thumbnail)
+                val radioButton = itemView.findViewById<MaterialRadioButton>(R.id.map_radio)
+                val editButton = itemView.findViewById<MaterialButton>(R.id.edit_button)
+                val deleteButton = itemView.findViewById<MaterialButton>(R.id.delete_button)
+
+                nameText.text = map.name
+                contextPreview.text = if (map.worldContext.isNotBlank()) map.worldContext else "No description"
+
+                radioButton.visibility = View.GONE
+
+                lifecycleScope.launch {
+                    val bitmap = withContext(Dispatchers.IO) {
+                        viewModel.loadMapThumbnail(map.imagePath)
+                    }
+                    bitmap?.let {
+                        thumbnail.setImageBitmap(it)
+                    }
+                }
+
+                editButton.setOnClickListener {
+                    showFantasyMapDialog(map)
+                }
+
+                deleteButton.setOnClickListener {
+                    showDeleteFantasyMapConfirmation(map)
+                }
+
+                binding.fantasyMapsContainer.addView(itemView)
+            }
+        }
+    }
+
+    private fun showFantasyMapDialog(existingMap: FantasyMap?) {
+        val dialogBinding = DialogAddFantasyMapBinding.inflate(layoutInflater)
+        pendingFantasyMapDialogBinding = dialogBinding
+        selectedFantasyMapImageUri = null
+
+        existingMap?.let { map ->
+            dialogBinding.mapNameInput.setText(map.name)
+            dialogBinding.worldContextInput.setText(map.worldContext)
+            dialogBinding.selectImageButton.text = getString(R.string.change_image)
+
+            lifecycleScope.launch {
+                val bitmap = withContext(Dispatchers.IO) {
+                    viewModel.loadMapThumbnail(map.imagePath)
+                }
+                bitmap?.let {
+                    dialogBinding.imagePreview.setImageBitmap(it)
+                    dialogBinding.imagePreview.visibility = View.VISIBLE
+                    dialogBinding.imagePlaceholder.visibility = View.GONE
+                }
+            }
+        }
+
+        dialogBinding.selectImageButton.setOnClickListener {
+            imagePickerLauncher.launch("image/*")
+        }
+
+        dialogBinding.imagePreviewCard.setOnClickListener {
+            imagePickerLauncher.launch("image/*")
+        }
+
+        val title = if (existingMap == null) R.string.add_fantasy_map else R.string.edit_fantasy_map
+
+        AlertDialog.Builder(requireContext())
+            .setTitle(title)
+            .setView(dialogBinding.root)
+            .setPositiveButton(R.string.save_button) { _, _ ->
+                val name = dialogBinding.mapNameInput.text?.toString() ?: ""
+                val worldContext = dialogBinding.worldContextInput.text?.toString() ?: ""
+
+                if (name.isBlank()) {
+                    showSnackbar(getString(R.string.fantasy_map_name_required))
+                    return@setPositiveButton
+                }
+
+                if (existingMap == null && selectedFantasyMapImageUri == null) {
+                    showSnackbar(getString(R.string.image_required))
+                    return@setPositiveButton
+                }
+
+                val success = viewModel.saveFantasyMap(
+                    name = name,
+                    worldContext = worldContext,
+                    imageUri = selectedFantasyMapImageUri,
+                    existingId = existingMap?.id,
+                    existingImagePath = existingMap?.imagePath
+                )
+
+                if (success) {
+                    showSnackbar(getString(R.string.fantasy_map_saved))
+                }
+
+                pendingFantasyMapDialogBinding = null
+                selectedFantasyMapImageUri = null
+            }
+            .setNegativeButton(R.string.cancel) { _, _ ->
+                pendingFantasyMapDialogBinding = null
+                selectedFantasyMapImageUri = null
+            }
+            .setOnDismissListener {
+                pendingFantasyMapDialogBinding = null
+            }
+            .show()
+    }
+
+    private fun showDeleteFantasyMapConfirmation(map: FantasyMap) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.delete_fantasy_map)
+            .setMessage("Delete \"${map.name}\"?")
+            .setPositiveButton(R.string.delete_fantasy_map) { _, _ ->
+                viewModel.deleteFantasyMap(map.id)
+                showSnackbar(getString(R.string.fantasy_map_deleted))
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
     private fun showSnackbar(message: String) {
         view?.let { rootView ->
             Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show()
@@ -304,6 +469,7 @@ class SettingsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        pendingFantasyMapDialogBinding = null
         _binding = null
     }
 }
