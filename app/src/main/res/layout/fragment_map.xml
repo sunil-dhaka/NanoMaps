@@ -13,7 +13,7 @@
         android:paddingStart="@dimen/spacing_md"
         android:paddingTop="@dimen/spacing_sm"
         android:paddingEnd="@dimen/spacing_md"
-        android:paddingBottom="@dimen/spacing_xxl">
+        android:paddingBottom="@dimen/spacing_lg">
 
         <!-- Search Bar -->
         <com.google.android.material.textfield.TextInputLayout

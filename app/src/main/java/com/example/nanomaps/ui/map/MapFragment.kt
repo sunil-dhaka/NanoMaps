@@ -518,9 +518,7 @@ class MapFragment : Fragment() {
 
     private fun showSnackbar(message: String) {
         view?.let { rootView ->
-            Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT)
-                .setAnchorView(requireActivity().findViewById(R.id.nav_view))
-                .show()
+            Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show()
         }
     }
 
