@@ -45,12 +45,12 @@ NanoMaps is an Android application that combines interactive mapping with Google
 
 ### 2. Install the App
 
-Download the latest APK from the [Releases](https://github.com/yourusername/NanoMaps/releases) page.
+Download the latest APK from the [Releases](https://github.com/sunil-dhaka/NanoMaps/releases) page.
 
 Or build from source:
 
 ```bash
-git clone https://github.com/yourusername/NanoMaps.git
+git clone https://github.com/sunil-dhaka/NanoMaps.git
 cd NanoMaps
 ./gradlew assembleDebug
 ```
