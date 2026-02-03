@@ -13,36 +13,30 @@
         android:contentDescription="@string/generated_image_desc"
         android:scaleType="fitCenter" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="#80000000"
-        android:orientation="horizontal"
-        android:padding="@dimen/spacing_md">
+    <!-- Save button - bottom left -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/dialog_save_button"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="@dimen/spacing_md"
+        android:contentDescription="@string/save_image"
+        app:icon="@drawable/ic_save"
+        app:iconSize="24dp"
+        app:iconTint="@color/white" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/dialog_save_button"
-            style="@style/Widget.Material3.Button.TextButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/save_image"
-            android:textColor="@color/white"
-            app:icon="@drawable/ic_save"
-            app:iconTint="@color/white" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/dialog_close_button"
-            style="@style/Widget.Material3.Button.TextButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/close"
-            android:textColor="@color/white"
-            app:icon="@drawable/ic_close"
-            app:iconTint="@color/white" />
-
-    </LinearLayout>
+    <!-- Close button - bottom right -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/dialog_close_button"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/spacing_md"
+        android:contentDescription="@string/close"
+        app:icon="@drawable/ic_close"
+        app:iconSize="24dp"
+        app:iconTint="@color/white" />
 
 </FrameLayout>
