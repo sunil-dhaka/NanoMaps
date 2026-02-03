@@ -556,6 +556,7 @@ class MapFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         binding.mapView.onResume()
+        viewModel.refreshCanGenerate()
     }
 
     override fun onPause() {

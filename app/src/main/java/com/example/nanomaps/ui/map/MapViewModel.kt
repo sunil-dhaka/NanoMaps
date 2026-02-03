@@ -200,6 +200,10 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
         return preferencesRepository.hasApiKey()
     }
 
+    fun refreshCanGenerate() {
+        updateCanGenerate()
+    }
+
     fun cancelGeneration() {
         generationJob?.cancel()
         generationJob = null
