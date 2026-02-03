@@ -350,27 +350,29 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/colorSurfaceContainerLow"
+                    android:gravity="center"
                     android:orientation="horizontal"
                     android:padding="@dimen/spacing_xs"
                     android:visibility="gone">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/view_full_button"
-                        style="@style/Widget.NanoMaps.Button.Text"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/view_full"
-                        app:icon="@drawable/ic_fullscreen" />
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginEnd="@dimen/spacing_lg"
+                        android:contentDescription="@string/view_full"
+                        app:icon="@drawable/ic_fullscreen"
+                        app:iconSize="24dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/save_button"
-                        style="@style/Widget.NanoMaps.Button.Text"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/save_image"
-                        app:icon="@drawable/ic_save" />
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:contentDescription="@string/save_image"
+                        app:icon="@drawable/ic_save"
+                        app:iconSize="24dp" />
 
                 </LinearLayout>
 
