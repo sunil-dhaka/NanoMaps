@@ -67,7 +67,9 @@ class SettingsFragment : Fragment() {
             }
         }
 
-        if (currentStyle != GenerationStyle.CUSTOM) {
+        if (currentStyle == GenerationStyle.CUSTOM) {
+            binding.styleDescription.text = getString(R.string.style_description)
+        } else {
             updateStyleDescription(currentStyle)
         }
 
@@ -238,12 +240,7 @@ class SettingsFragment : Fragment() {
     private fun selectCustomStyle(styleId: String) {
         selectedCustomStyleId = styleId
         binding.styleChipGroup.clearCheck()
-
-        val customStyle = viewModel.getCustomStyleById(styleId)
-        if (customStyle != null) {
-            binding.styleDescription.text = customStyle.prompt
-        }
-
+        binding.styleDescription.text = getString(R.string.style_description)
         updateCustomStylesUI()
     }
 
