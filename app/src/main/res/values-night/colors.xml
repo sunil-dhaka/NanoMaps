@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Material 3 Dark Theme Colors -->
+    <!-- Primary - Teal/Cyan for fresh map-oriented aesthetic -->
+    <color name="md_theme_dark_primary">#82D3E0</color>
+    <color name="md_theme_dark_onPrimary">#00363D</color>
+    <color name="md_theme_dark_primaryContainer">#004F58</color>
+    <color name="md_theme_dark_onPrimaryContainer">#9EEFFD</color>
+
+    <!-- Secondary -->
+    <color name="md_theme_dark_secondary">#B1CBD0</color>
+    <color name="md_theme_dark_onSecondary">#1C3438</color>
+    <color name="md_theme_dark_secondaryContainer">#334B4F</color>
+    <color name="md_theme_dark_onSecondaryContainer">#CDE7EC</color>
+
+    <!-- Tertiary -->
+    <color name="md_theme_dark_tertiary">#BBC6EA</color>
+    <color name="md_theme_dark_onTertiary">#25304D</color>
+    <color name="md_theme_dark_tertiaryContainer">#3B4664</color>
+    <color name="md_theme_dark_onTertiaryContainer">#DAE2FF</color>
+
+    <!-- Error -->
+    <color name="md_theme_dark_error">#FFB4AB</color>
+    <color name="md_theme_dark_onError">#690005</color>
+    <color name="md_theme_dark_errorContainer">#93000A</color>
+    <color name="md_theme_dark_onErrorContainer">#FFDAD6</color>
+
+    <!-- Background and Surface -->
+    <color name="md_theme_dark_background">#101415</color>
+    <color name="md_theme_dark_onBackground">#E0E3E3</color>
+    <color name="md_theme_dark_surface">#101415</color>
+    <color name="md_theme_dark_onSurface">#E0E3E3</color>
+    <color name="md_theme_dark_surfaceVariant">#3F484A</color>
+    <color name="md_theme_dark_onSurfaceVariant">#BFC8CA</color>
+
+    <!-- Surface Containers -->
+    <color name="md_theme_dark_surfaceContainerLowest">#0B0F10</color>
+    <color name="md_theme_dark_surfaceContainerLow">#181C1D</color>
+    <color name="md_theme_dark_surfaceContainer">#1C2021</color>
+    <color name="md_theme_dark_surfaceContainerHigh">#272A2B</color>
+    <color name="md_theme_dark_surfaceContainerHighest">#313536</color>
+
+    <!-- Outline -->
+    <color name="md_theme_dark_outline">#899294</color>
+    <color name="md_theme_dark_outlineVariant">#3F484A</color>
+
+    <!-- Inverse -->
+    <color name="md_theme_dark_inverseSurface">#E0E3E3</color>
+    <color name="md_theme_dark_inverseOnSurface">#2E3132</color>
+    <color name="md_theme_dark_inversePrimary">#006874</color>
+
+    <!-- Scrim -->
+    <color name="md_theme_dark_scrim">#000000</color>
+
+    <!-- Custom app colors -->
+    <color name="marker_blue">#82B1FF</color>
+    <color name="direction_red">#FF7961</color>
+    <color name="success_green">#69F0AE</color>
+
+    <!-- Compatibility aliases -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>

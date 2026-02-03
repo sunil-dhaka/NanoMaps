@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.settings.SettingsFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_md">
+
+        <!-- API Key Section Card -->
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.NanoMaps.Card.Settings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="?attr/colorSurfaceContainerLow">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_md">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_size_medium"
+                        android:layout_height="@dimen/icon_size_medium"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_key" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_sm"
+                        android:layout_weight="1"
+                        android:text="@string/api_key_label"
+                        android:textAppearance="@style/TextAppearance.NanoMaps.SectionHeader" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:text="@string/api_key_description"
+                    android:textAppearance="@style/TextAppearance.NanoMaps.SectionDescription" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/api_key_layout"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    android:hint="@string/api_key_hint"
+                    app:endIconMode="password_toggle">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/api_key_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:maxLines="1" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/get_key_button"
+                    style="@style/Widget.NanoMaps.Button.Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:text="@string/get_api_key"
+                    app:icon="@drawable/ic_open_external" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Generation Style Section Card -->
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.NanoMaps.Card.Settings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_md"
+            app:cardBackgroundColor="?attr/colorSurfaceContainerLow">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_md">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_size_medium"
+                        android:layout_height="@dimen/icon_size_medium"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_palette" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_sm"
+                        android:layout_weight="1"
+                        android:text="@string/style_title"
+                        android:textAppearance="@style/TextAppearance.NanoMaps.SectionHeader" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/style_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:text="@string/style_realistic_desc"
+                    android:textAppearance="@style/TextAppearance.NanoMaps.SectionDescription" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/style_chip_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    app:selectionRequired="true"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_realistic"
+                        style="@style/Widget.NanoMaps.Chip.Style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="@string/style_realistic" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_cinematic"
+                        style="@style/Widget.NanoMaps.Chip.Style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/style_cinematic" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_rainy"
+                        style="@style/Widget.NanoMaps.Chip.Style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/style_rainy" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_vintage"
+                        style="@style/Widget.NanoMaps.Chip.Style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/style_vintage" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_anime"
+                        style="@style/Widget.NanoMaps.Chip.Style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/style_anime" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Aspect Ratio Section Card -->
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.NanoMaps.Card.Settings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_md"
+            app:cardBackgroundColor="?attr/colorSurfaceContainerLow">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_md">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_size_medium"
+                        android:layout_height="@dimen/icon_size_medium"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_aspect_ratio" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_sm"
+                        android:layout_weight="1"
+                        android:text="@string/aspect_ratio_title"
+                        android:textAppearance="@style/TextAppearance.NanoMaps.SectionHeader" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:text="@string/aspect_ratio_description"
+                    android:textAppearance="@style/TextAppearance.NanoMaps.SectionDescription" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/aspect_ratio_chip_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    app:selectionRequired="true"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_ratio_16_9"
+                        style="@style/Widget.NanoMaps.Chip.AspectRatio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="16:9" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_ratio_4_3"
+                        style="@style/Widget.NanoMaps.Chip.AspectRatio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4:3" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_ratio_3_4"
+                        style="@style/Widget.NanoMaps.Chip.AspectRatio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="3:4" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_ratio_1_1"
+                        style="@style/Widget.NanoMaps.Chip.AspectRatio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1:1" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_ratio_9_16"
+                        style="@style/Widget.NanoMaps.Chip.AspectRatio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="9:16" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_ratio_21_9"
+                        style="@style/Widget.NanoMaps.Chip.AspectRatio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="21:9" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Image Size Section Card -->
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.NanoMaps.Card.Settings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_md"
+            app:cardBackgroundColor="?attr/colorSurfaceContainerLow">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_md">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_size_medium"
+                        android:layout_height="@dimen/icon_size_medium"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_image_size" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_sm"
+                        android:layout_weight="1"
+                        android:text="@string/image_size_title"
+                        android:textAppearance="@style/TextAppearance.NanoMaps.SectionHeader" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:text="@string/image_size_description"
+                    android:textAppearance="@style/TextAppearance.NanoMaps.SectionDescription" />
+
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/size_toggle_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    app:selectionRequired="true"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_size_1k"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/size_1k_short" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_size_2k"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:text="@string/size_2k_short" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_size_4k"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/size_4k_short" />
+
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Save Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/save_button"
+            style="@style/Widget.NanoMaps.Button.Generate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_lg"
+            android:text="@string/save_button" />
+
+        <!-- Status Text -->
+        <TextView
+            android:id="@+id/status_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:gravity="center"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:visibility="gone"
+            tools:text="Settings saved"
+            tools:visibility="visible" />
+
+        <!-- Bottom padding for navigation -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spacing_xxl" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

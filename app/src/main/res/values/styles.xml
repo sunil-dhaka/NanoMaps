@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Map Layer Chip Style -->
+    <style name="Widget.NanoMaps.Chip.MapLayer" parent="Widget.Material3.Chip.Filter">
+        <item name="chipMinHeight">@dimen/chip_height</item>
+        <item name="chipCornerRadius">@dimen/corner_small</item>
+        <item name="chipBackgroundColor">@color/chip_map_overlay_bg</item>
+        <item name="android:textAppearance">?attr/textAppearanceLabelMedium</item>
+        <item name="chipMinTouchTargetSize">40dp</item>
+        <item name="checkedIconEnabled">false</item>
+    </style>
+
+    <!-- Style Selection Chip -->
+    <style name="Widget.NanoMaps.Chip.Style" parent="Widget.Material3.Chip.Filter">
+        <item name="chipCornerRadius">@dimen/corner_small</item>
+        <item name="android:textAppearance">?attr/textAppearanceLabelLarge</item>
+        <item name="chipMinTouchTargetSize">48dp</item>
+    </style>
+
+    <!-- Aspect Ratio Chip -->
+    <style name="Widget.NanoMaps.Chip.AspectRatio" parent="Widget.Material3.Chip.Filter">
+        <item name="chipCornerRadius">@dimen/corner_small</item>
+        <item name="android:textAppearance">?attr/textAppearanceLabelMedium</item>
+    </style>
+
+    <!-- Settings Card Style -->
+    <style name="Widget.NanoMaps.Card.Settings" parent="Widget.Material3.CardView.Filled">
+        <item name="cardCornerRadius">@dimen/corner_large</item>
+        <item name="cardElevation">@dimen/elevation_none</item>
+        <item name="contentPadding">@dimen/spacing_md</item>
+    </style>
+
+    <!-- Result Card Style -->
+    <style name="Widget.NanoMaps.Card.Result" parent="Widget.Material3.CardView.Outlined">
+        <item name="cardCornerRadius">@dimen/corner_medium</item>
+        <item name="strokeColor">?attr/colorOutlineVariant</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <!-- Info Card Style (Location/Direction) -->
+    <style name="Widget.NanoMaps.Card.Info" parent="Widget.Material3.CardView.Filled">
+        <item name="cardCornerRadius">@dimen/corner_small</item>
+        <item name="cardElevation">@dimen/elevation_low</item>
+        <item name="cardBackgroundColor">?attr/colorSurfaceContainerLow</item>
+    </style>
+
+    <!-- Generate Button Style -->
+    <style name="Widget.NanoMaps.Button.Generate" parent="Widget.Material3.Button">
+        <item name="cornerRadius">@dimen/corner_medium</item>
+        <item name="android:paddingTop">@dimen/spacing_sm</item>
+        <item name="android:paddingBottom">@dimen/spacing_sm</item>
+    </style>
+
+    <!-- Text Button Style -->
+    <style name="Widget.NanoMaps.Button.Text" parent="Widget.Material3.Button.TextButton">
+        <item name="cornerRadius">@dimen/corner_small</item>
+    </style>
+
+    <!-- Section Header Text Style -->
+    <style name="TextAppearance.NanoMaps.SectionHeader" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <!-- Section Description Text Style -->
+    <style name="TextAppearance.NanoMaps.SectionDescription" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+    </style>
+
+    <!-- Caption Text Style -->
+    <style name="TextAppearance.NanoMaps.Caption" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+    </style>
+
+    <!-- Search Bar Style -->
+    <style name="Widget.NanoMaps.TextInputLayout.Search" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">@dimen/corner_extra_large</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/corner_extra_large</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/corner_extra_large</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/corner_extra_large</item>
+    </style>
+
+    <!-- Bottom Navigation Style -->
+    <style name="Widget.NanoMaps.BottomNavigation" parent="Widget.Material3.BottomNavigationView">
+        <item name="backgroundTint">?attr/colorSurfaceContainer</item>
+        <item name="itemIconTint">@color/bottom_nav_icon_color</item>
+        <item name="itemTextColor">@color/bottom_nav_icon_color</item>
+        <item name="labelVisibilityMode">labeled</item>
+    </style>
+</resources>

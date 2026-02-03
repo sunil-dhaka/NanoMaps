@@ -1,0 +1,58 @@
+# Gradle files
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# Local configuration file
+local.properties
+
+# Log/OS Files
+*.log
+.DS_Store
+
+# Android Studio
+*.iml
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+.idea/gradle.xml
+.idea/jarRepositories.xml
+.idea/deploymentTargetSelector.xml
+.idea/vcs.xml
+
+# Keystore files
+*.jks
+*.keystore
+
+# Captures
+captures/
+
+# External native build
+.externalNativeBuild/
+.cxx/
+
+# Google Services (should not be committed)
+google-services.json
+
+# Generated files
+app/debug/
+app/release/
+
+# APK files
+*.apk
+*.aar
+
+# Output of the release build
+/app/build/outputs/
+
+# Signing secrets
+signing.properties
+keystore.properties
+
+# Test output
+/app/src/androidTest/

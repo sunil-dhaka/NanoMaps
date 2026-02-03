@@ -1,0 +1,83 @@
+<resources>
+    <string name="app_name">NanoMaps</string>
+    <string name="title_map">Map</string>
+    <string name="title_settings">Settings</string>
+    <string name="search_hint">Search location...</string>
+    <string name="location_label">Location</string>
+    <string name="direction_label">Direction</string>
+    <string name="custom_prompt_hint">Custom prompt (optional)</string>
+    <string name="generate_button">Generate View</string>
+    <string name="api_key_label">Gemini API Key</string>
+    <string name="api_key_hint">Enter your API key</string>
+    <string name="get_api_key">Get API Key</string>
+    <string name="save_button">Save</string>
+    <string name="api_key_saved">API key saved</string>
+    <string name="api_key_required">Please enter an API key</string>
+    <string name="location_not_selected">Tap on map to select location</string>
+    <string name="direction_not_set">Drag from marker to set direction</string>
+    <string name="generating">Generating street view...</string>
+    <string name="placeholder_text">Generated image will appear here</string>
+    <string name="error_no_api_key">Please set your API key in Settings</string>
+    <string name="error_no_location">Please select a location first</string>
+    <string name="error_generation_failed">Generation failed: %1$s</string>
+    <string name="success_generated">Street view generated</string>
+    <string name="layer_street">Street</string>
+    <string name="layer_satellite">Satellite</string>
+
+    <string name="style_title">Generation Style</string>
+    <string name="style_description">Choose how your street view will be rendered. Each style creates a unique atmosphere and mood.</string>
+    <string name="settings_saved">Settings saved</string>
+
+    <string name="style_realistic">Photorealistic</string>
+    <string name="style_realistic_desc">Crystal-clear Google Street View quality. Perfect lighting, sharp details, exactly what you\'d see walking down the street on a pleasant day.</string>
+
+    <string name="style_cinematic">Cinematic Golden Hour</string>
+    <string name="style_cinematic_desc">Hollywood magic hour vibes. Warm amber sunlight, long dramatic shadows, lens flares dancing through the scene. Every frame is movie-poster worthy.</string>
+
+    <string name="style_rainy">Moody Rainy Day</string>
+    <string name="style_rainy_desc">Wet streets glistening with reflections, misty atmosphere, neon signs bleeding color into puddles. That cozy \"watching rain from a cafe\" aesthetic.</string>
+
+    <string name="style_vintage">Retro Throwback</string>
+    <string name="style_vintage_desc">Step into a time machine! Faded colors, film grain, slight vignette - like a Polaroid from the \'70s your parents might have taken.</string>
+
+    <string name="style_anime">Anime World</string>
+    <string name="style_anime_desc">Your neighborhood reimagined by Studio Ghibli. Vibrant colors, dreamy skies with fluffy clouds, that magical Japanese animation style that makes everything feel alive.</string>
+
+    <string name="aspect_ratio_title">Aspect Ratio</string>
+    <string name="aspect_ratio_description">Choose the dimensions of your generated image.</string>
+    <string name="ratio_16_9">16:9 - Widescreen</string>
+    <string name="ratio_4_3">4:3 - Standard</string>
+    <string name="ratio_3_4">3:4 - Portrait</string>
+    <string name="ratio_1_1">1:1 - Square</string>
+    <string name="ratio_9_16">9:16 - Vertical (Stories/Reels)</string>
+    <string name="ratio_21_9">21:9 - Ultrawide (Cinematic)</string>
+
+    <string name="image_size_title">Image Resolution</string>
+    <string name="image_size_description">Higher resolution produces sharper images but takes longer to generate.</string>
+    <string name="size_1k">1K - Standard (Fast)</string>
+    <string name="size_2k">2K - High Quality (Recommended)</string>
+    <string name="size_4k">4K - Ultra High (Slower)</string>
+
+    <string name="save_image">Save</string>
+    <string name="image_saved">Image saved to gallery</string>
+    <string name="image_save_failed">Failed to save image</string>
+    <string name="result_title">Generated Result</string>
+    <string name="view_full">View Full</string>
+    <string name="close">Close</string>
+
+    <!-- New M3 UI strings -->
+    <string name="tap_drag_instruction">Tap to place marker, drag to set direction</string>
+    <string name="generating_subtitle">This may take a moment</string>
+    <string name="cancel">Cancel</string>
+    <string name="api_key_description">Required to generate AI street views</string>
+    <string name="generated_image_desc">Generated street view image</string>
+    <string name="size_1k_short">1K</string>
+    <string name="size_2k_short">2K</string>
+    <string name="size_4k_short">4K</string>
+
+    <!-- Generate button requirement hints -->
+    <string name="requirement_select_location">Select a location on the map</string>
+    <string name="requirement_set_direction">Drag from marker to set view direction</string>
+    <string name="requirement_set_api_key">Set your API key in Settings</string>
+    <string name="ready_to_generate">Ready to generate</string>
+</resources>
