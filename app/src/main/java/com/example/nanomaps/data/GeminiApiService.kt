@@ -33,13 +33,14 @@ class GeminiApiService {
         customPrompt: String?,
         isSatelliteView: Boolean,
         style: GenerationStyle,
+        customStylePrompt: String?,
         aspectRatio: AspectRatio,
         imageSize: ImageSize
     ): Result<Bitmap> = withContext(Dispatchers.IO) {
         try {
             val result = generateWithModel(
                 apiKey, latitude, longitude, direction,
-                mapBitmap, customPrompt, isSatelliteView, style, aspectRatio, imageSize
+                mapBitmap, customPrompt, isSatelliteView, style, customStylePrompt, aspectRatio, imageSize
             )
             Result.success(result)
         } catch (e: Exception) {
@@ -56,10 +57,11 @@ class GeminiApiService {
         customPrompt: String?,
         isSatelliteView: Boolean,
         style: GenerationStyle,
+        customStylePrompt: String?,
         aspectRatio: AspectRatio,
         imageSize: ImageSize
     ): Bitmap {
-        val prompt = buildPrompt(latitude, longitude, direction, customPrompt, isSatelliteView, style)
+        val prompt = buildPrompt(latitude, longitude, direction, customPrompt, isSatelliteView, style, customStylePrompt)
         val mapBase64 = bitmapToBase64(mapBitmap)
 
         val requestBody = JSONObject().apply {
@@ -155,7 +157,8 @@ class GeminiApiService {
         direction: Int,
         customPrompt: String?,
         isSatelliteView: Boolean,
-        style: GenerationStyle
+        style: GenerationStyle,
+        customStylePrompt: String?
     ): String {
         val directionName = getDirectionName(direction)
         val coords = "${String.format("%.6f", latitude)}, ${String.format("%.6f", longitude)}"
@@ -177,7 +180,12 @@ Using the street map provided, analyze:
             """.trimIndent()
         }
 
-        val stylePrompt = when (style) {
+        val stylePrompt = if (style == GenerationStyle.CUSTOM && !customStylePrompt.isNullOrBlank()) {
+            """
+STYLE: Custom User Style
+$customStylePrompt
+            """.trimIndent()
+        } else when (style) {
             GenerationStyle.REALISTIC -> """
 STYLE: Photorealistic Street View
 Create a crystal-clear, ultra-realistic photograph as if captured by a professional street-level camera.
@@ -236,6 +244,11 @@ Reimagine this location in the beautiful style of Japanese anime, specifically S
 - Warm, inviting lighting that makes everything feel alive
 - Small details that add charm (birds, floating particles, gentle wind effects)
 Channel the spirit of Spirited Away, Howl's Moving Castle, or My Neighbor Totoro.
+            """.trimIndent()
+
+            GenerationStyle.CUSTOM -> """
+STYLE: Photorealistic Street View
+Create a crystal-clear, ultra-realistic photograph.
             """.trimIndent()
         }
 

@@ -3,13 +3,36 @@ package com.example.nanomaps.data
 import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import org.json.JSONArray
+import org.json.JSONObject
 
 enum class GenerationStyle {
     REALISTIC,
     CINEMATIC,
     RAINY,
     VINTAGE,
-    ANIME
+    ANIME,
+    CUSTOM
+}
+
+data class CustomStyle(
+    val id: String,
+    val name: String,
+    val prompt: String
+) {
+    fun toJson(): JSONObject = JSONObject().apply {
+        put("id", id)
+        put("name", name)
+        put("prompt", prompt)
+    }
+
+    companion object {
+        fun fromJson(json: JSONObject): CustomStyle = CustomStyle(
+            id = json.getString("id"),
+            name = json.getString("name"),
+            prompt = json.getString("prompt")
+        )
+    }
 }
 
 enum class AspectRatio(val value: String, val displayName: String) {
@@ -66,6 +89,54 @@ class PreferencesRepository(context: Context) {
         }
     }
 
+    fun saveSelectedCustomStyleId(styleId: String?) {
+        sharedPreferences.edit().putString(KEY_SELECTED_CUSTOM_STYLE_ID, styleId).apply()
+    }
+
+    fun getSelectedCustomStyleId(): String? {
+        return sharedPreferences.getString(KEY_SELECTED_CUSTOM_STYLE_ID, null)
+    }
+
+    fun saveCustomStyle(style: CustomStyle) {
+        val styles = getCustomStyles().toMutableList()
+        val existingIndex = styles.indexOfFirst { it.id == style.id }
+        if (existingIndex >= 0) {
+            styles[existingIndex] = style
+        } else {
+            styles.add(style)
+        }
+        saveCustomStyles(styles)
+    }
+
+    fun deleteCustomStyle(styleId: String) {
+        val styles = getCustomStyles().filter { it.id != styleId }
+        saveCustomStyles(styles)
+        if (getSelectedCustomStyleId() == styleId) {
+            saveSelectedCustomStyleId(null)
+            saveStyle(GenerationStyle.REALISTIC)
+        }
+    }
+
+    fun getCustomStyles(): List<CustomStyle> {
+        val json = sharedPreferences.getString(KEY_CUSTOM_STYLES, null) ?: return emptyList()
+        return try {
+            val jsonArray = JSONArray(json)
+            (0 until jsonArray.length()).map { CustomStyle.fromJson(jsonArray.getJSONObject(it)) }
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    fun getCustomStyleById(id: String): CustomStyle? {
+        return getCustomStyles().find { it.id == id }
+    }
+
+    private fun saveCustomStyles(styles: List<CustomStyle>) {
+        val jsonArray = JSONArray()
+        styles.forEach { jsonArray.put(it.toJson()) }
+        sharedPreferences.edit().putString(KEY_CUSTOM_STYLES, jsonArray.toString()).apply()
+    }
+
     fun saveAspectRatio(ratio: AspectRatio) {
         sharedPreferences.edit().putString(KEY_ASPECT_RATIO, ratio.name).apply()
     }
@@ -97,6 +168,8 @@ class PreferencesRepository(context: Context) {
         private const val KEY_STYLE = "generation_style"
         private const val KEY_ASPECT_RATIO = "aspect_ratio"
         private const val KEY_IMAGE_SIZE = "image_size"
+        private const val KEY_CUSTOM_STYLES = "custom_styles"
+        private const val KEY_SELECTED_CUSTOM_STYLE_ID = "selected_custom_style_id"
 
         @Volatile
         private var instance: PreferencesRepository? = null

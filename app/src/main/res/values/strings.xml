@@ -80,4 +80,18 @@
     <string name="requirement_set_direction">Drag from marker to set view direction</string>
     <string name="requirement_set_api_key">Set your API key in Settings</string>
     <string name="ready_to_generate">Ready to generate</string>
+
+    <!-- Custom styles -->
+    <string name="custom_styles_title">Custom Styles</string>
+    <string name="custom_styles_description">Create your own generation styles with custom prompts.</string>
+    <string name="add_custom_style">Add Custom Style</string>
+    <string name="edit_custom_style">Edit Style</string>
+    <string name="delete_custom_style">Delete</string>
+    <string name="custom_style_name_hint">Style name</string>
+    <string name="custom_style_prompt_hint">Describe how the image should look (lighting, mood, colors, artistic style...)</string>
+    <string name="custom_style_saved">Custom style saved</string>
+    <string name="custom_style_deleted">Custom style deleted</string>
+    <string name="custom_style_name_required">Please enter a style name</string>
+    <string name="custom_style_prompt_required">Please enter a style prompt</string>
+    <string name="no_custom_styles">No custom styles yet. Tap + to create one.</string>
 </resources>

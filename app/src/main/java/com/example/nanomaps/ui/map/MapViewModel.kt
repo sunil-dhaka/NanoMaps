@@ -104,6 +104,11 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
         val aspectRatio = preferencesRepository.getAspectRatio()
         val imageSize = preferencesRepository.getImageSize()
 
+        val customStylePrompt = if (style == com.example.nanomaps.data.GenerationStyle.CUSTOM) {
+            val customStyleId = preferencesRepository.getSelectedCustomStyleId()
+            customStyleId?.let { preferencesRepository.getCustomStyleById(it)?.prompt }
+        } else null
+
         _generationState.value = GenerationState.Loading
 
         generationJob = viewModelScope.launch {
@@ -116,6 +121,7 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
                 customPrompt = customPrompt,
                 isSatelliteView = isSatellite,
                 style = style,
+                customStylePrompt = customStylePrompt,
                 aspectRatio = aspectRatio,
                 imageSize = imageSize
             )
