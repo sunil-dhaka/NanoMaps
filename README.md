@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="banner.svg" alt="NanoMaps Banner" width="100%"/>
+</p>
+
 # NanoMaps
 
 AI-powered street view generation for Android. Transform any location on the map into a stunning, AI-generated street-level image.

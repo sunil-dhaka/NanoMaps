@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 180" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="800" y2="180">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#161b22"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="180" rx="12" fill="url(#bg)"/>
+  <rect x="0" y="0" width="4" height="180" rx="2" fill="#2dd4bf" opacity="0.8"/>
+  <!-- Map pin -->
+  <path d="M110 118 L96 82 Q88 62 110 56 Q132 62 124 82 Z" stroke="#5eead4" stroke-width="2" fill="none"/>
+  <circle cx="110" cy="74" r="8" stroke="#5eead4" stroke-width="1.5" fill="none"/>
+  <circle cx="110" cy="74" r="2.5" fill="#2dd4bf" opacity="0.7"/>
+  <!-- AI sparkle top-right of pin -->
+  <path d="M132 56 L134 50 L136 56 L142 58 L136 60 L134 66 L132 60 L126 58 Z" fill="#2dd4bf" opacity="0.5"/>
+  <path d="M142 48 L143 45 L144 48 L147 49 L144 50 L143 53 L142 50 L139 49 Z" fill="#2dd4bf" opacity="0.35"/>
+  <!-- Subtle grid lines (map grid) -->
+  <line x1="80" y1="100" x2="140" y2="100" stroke="#2dd4bf" stroke-width="0.5" opacity="0.15"/>
+  <line x1="80" y1="84" x2="140" y2="84" stroke="#2dd4bf" stroke-width="0.5" opacity="0.15"/>
+  <line x1="95" y1="50" x2="95" y2="120" stroke="#2dd4bf" stroke-width="0.5" opacity="0.15"/>
+  <line x1="125" y1="50" x2="125" y2="120" stroke="#2dd4bf" stroke-width="0.5" opacity="0.15"/>
+  <!-- Text -->
+  <text x="190" y="82" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="36" font-weight="600" fill="#e6edf3" letter-spacing="2">NanoMaps</text>
+  <text x="190" y="112" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" fill="#8b949e" letter-spacing="0.5">AI Street View Generator</text>
+  <line x1="190" y1="122" x2="430" y2="122" stroke="#21262d" stroke-width="1"/>
+  <text x="190" y="142" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11" fill="#6e7681">Generate street-level views from any map location</text>
+</svg>
