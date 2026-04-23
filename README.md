@@ -33,17 +33,14 @@ NanoMaps is an Android application that combines interactive mapping with Google
 
 A visual walkthrough of the app.
 
-![01 Home](assets/01_home_map.png)
-*Launch screen — the Real World map loads with Street/Satellite layer chips and the generation form below.*
-
-![02 Search query](assets/02_search_query.png)
-*User types "Paris Eiffel Tower" into the search bar to navigate the map to a specific place.*
-
-![05 Location info and Generate View](assets/05_location_and_generate.png)
-*A marker is dropped at 48.857783, 2.294490 — the Eiffel Tower. The info card shows the selected coordinates; the Generate View button waits for a direction and a valid Gemini API key.*
-
-![06 Settings](assets/06_settings.png)
-*Settings screen — configure the Gemini API key and pick a generation style such as Cinematic Golden Hour.*
+<table align="center" width="100%">
+  <tr>
+    <td width="25%" align="center"><img src="assets/01_home_map.png" alt="Home map" width="200"/><br/><sub>Home map</sub></td>
+    <td width="25%" align="center"><img src="assets/02_search_query.png" alt="Search query" width="200"/><br/><sub>Search a place</sub></td>
+    <td width="25%" align="center"><img src="assets/05_location_and_generate.png" alt="Location and Generate" width="200"/><br/><sub>Pin location and generate</sub></td>
+    <td width="25%" align="center"><img src="assets/06_settings.png" alt="Settings" width="200"/><br/><sub>Settings and styles</sub></td>
+  </tr>
+</table>
 
 ## Requirements
 
