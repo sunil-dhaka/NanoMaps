@@ -31,7 +31,25 @@ NanoMaps is an Android application that combines interactive mapping with Google
 
 ## Screenshots
 
-*Screenshots coming soon*
+A visual walkthrough of the app.
+
+![01 Home](assets/01_home_map.png)
+*Launch screen — the Real World map loads with Street/Satellite layer chips and the generation form below.*
+
+![02 Search query](assets/02_search_query.png)
+*User types "Paris Eiffel Tower" into the search bar to navigate the map to a specific place.*
+
+![03 Search result](assets/03_search_result_map.png)
+*The app geocodes the query and begins recentering the map onto the searched location.*
+
+![04 Marker placed](assets/04_marker_placed.png)
+*Tapping the map drops a marker at 48.857783, 2.294490 — the Eiffel Tower — and prompts the user to drag for a viewing direction.*
+
+![05 Location info and Generate View](assets/05_location_and_generate.png)
+*The info card shows the selected coordinates; the Generate View button waits for a direction and a valid Gemini API key.*
+
+![06 Settings](assets/06_settings.png)
+*Settings screen — configure the Gemini API key and pick a generation style such as Cinematic Golden Hour.*
 
 ## Requirements
 
